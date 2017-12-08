@@ -2,3 +2,6 @@
 .idea
 out
 ID3stuff.iml
+
+# compiled java classes
+*.class
