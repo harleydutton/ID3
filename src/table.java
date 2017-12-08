@@ -33,18 +33,23 @@ public class table {
     public static void main(String[] args){
         base=2.0;
         table t = new table(4,2);
-        t.add(new String[]{ "blue", "square", "B"});
-        t.add(new String[]{"blue","triangle", "B"});
-        t.add(new String[]{"blue","square", "B"});
-        t.add(new String[]{"red","circle", "A"});
+        t.add(new String[]{ "green", "square", "B"});
+        t.add(new String[]{"green","square", "B"});
+        t.add(new String[]{"green","circle", "C"});
+        t.add(new String[]{"green","circle", "A"});
         //t.add(new String[]{"red","square", "A"});
         //t.add(new String[]{"blue","circle", "C"});
         System.out.println(t);
         System.out.println(t.tableEntropy());
 
-        System.out.println(t.highestGainFeature());
-        //either gain of highestgainfeature is broken
+        System.out.println("highest gain feature is:"+t.highestGainFeature());
+        //this should be spitting out "1" as the best feature.
+        //either gain() or highestgainfeature() is broken
         //figure out how to test these
+        //it was an off ObO error -.-
+
+        System.out.println(t.gain(0));
+        System.out.println(t.gain(1));
 
 //        for(table temp : t.makeSubTables(1)){
 //            System.out.println(temp);
@@ -80,7 +85,7 @@ public class table {
         //for()
         //iterate through features
         //do stuff
-        for(int i  = 0 ; i < features-1; i++){
+        for(int i  = 0 ; i < features; i++){
             if(gain(i)>bestValue){
                 bestIndex=i;
                 bestValue=gain(i);
