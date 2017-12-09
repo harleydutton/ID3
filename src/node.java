@@ -53,15 +53,19 @@ public class node {
         //if(!children.isEmpty()){ out+=":"; }
         //out+="\n";
         int tab = 4;
-
+        String s = new ArrayList<>(Arrays.asList(myTab.getCats())).toString();
         for(String key : children.keySet()){
-            String temp = children.get(key).name+"-->"+key+"\n";
+            String temp = children.get(key).name+"-->"+key+
+                    (!children.get(key).myTab.shouldSplit()?
+                            ":"+children.get(key).myTab.catsAsSet():
+                            "")+"\n";
             if(!children.get(key).children.isEmpty()){
                 temp+=indent(tab,children.get(key).toString());
                 //temp+=indent(tab,new ArrayList<>(Arrays.asList(myTab.getCats())).toString());
             }else{
-
+                //
             }
+//            temp+=new ArrayList<>(Arrays.asList(myTab.getCats())).toString();
             out+=indent(0,temp);
         }
 
@@ -79,7 +83,8 @@ public class node {
         out=pad+out;
         return out;
     }
-    public void split(){
+    public void split(){//always check to see if you should split before you do.
+        if(!myTab.shouldSplit()){return;}
         int feat = myTab.highestGainFeature();
         table[] tables=myTab.makeSubTables(feat);
         String[] featnames = myTab.getFeatLables(feat);

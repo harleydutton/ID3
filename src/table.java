@@ -36,16 +36,16 @@ public class table {
         table t = new table(10,3);
         String[] fl = new String[]{"quant","color","shape"};
         t.featureLables = new ArrayList<String>(Arrays.asList(fl));
-        t.add(new String[]{"1","red","square","A"});
-        t.add(new String[]{"1","blue","square","B"});
-        t.add(new String[]{"1","red","circle","C"});
-        t.add(new String[]{"1","blue","circle","D"});
-        t.add(new String[]{"2","red","triangle","A"});
-        t.add(new String[]{"2","blue","triangle","B"});
-        t.add(new String[]{"2","green","triangle","C"});
-        t.add(new String[]{"1","green","square","A"});
-        t.add(new String[]{"2","red","circle","B"});
-        t.add(new String[]{"1","red","triangle","C"});
+        t.add(new String[]{"1","red","square","A"});//0
+        t.add(new String[]{"1","blue","square","B"});//1
+        t.add(new String[]{"1","red","circle","C"});//2
+        t.add(new String[]{"1","blue","circle","D"});//3
+        t.add(new String[]{"2","red","triangle","A"});//4
+        t.add(new String[]{"2","blue","triangle","B"});//5
+        t.add(new String[]{"2","green","triangle","C"});//6
+        t.add(new String[]{"1","green","square","A"});//7
+        t.add(new String[]{"2","red","circle","B"});//8
+        t.add(new String[]{"1","red","triangle","C"});//9
 
         //info output
         System.out.println(t);

@@ -13,14 +13,9 @@ public class test2 {
         t.add(new String[]{"blue","tri","B"});
 
         System.out.println(t);
-        System.out.println("entropy of t:"+t.tableEntropy());
-        System.out.println("highest gain feature is:"+t.highestGainFeature());
-        int i = t.highestGainFeature();
-        for(table temp : t.makeSubTables(i)){
-            System.out.println(temp);
-            System.out.println(table.rowsep);
-        }
-        System.out.print("IG of highest gain feature is: ");
-        System.out.println(t.gain(t.highestGainFeature()));
+        System.out.println(table.rowsep);
+        node n = new node("root",t);
+        n.split();
+        System.out.println(n);
     }
 }
