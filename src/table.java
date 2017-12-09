@@ -6,7 +6,7 @@ public class Table {
     private String[][] contents;
     private int elements;
     private int categoryIndex;
-    private int features;
+    private int featureCount;
     private int addIndex;
     private String choiceOrClass;
     static String rowsep = "##############";
@@ -15,14 +15,14 @@ public class Table {
     //todo
     //make the decision tree
 
-    public Table(int elements, int features) {
-        this.features = features;
+    public Table(int elements, int featureCount) {
+        this.featureCount = featureCount;
         this.elements = elements;
 
-        categoryIndex = features + 1;
+        categoryIndex = featureCount + 1;
         featureLabels = new ArrayList<String>();
 
-        contents = new String[elements][features + 1];
+        contents = new String[elements][featureCount + 1];
         for (String[] row : contents) {
             for (String cell : row) {
                 cell = "";
@@ -67,7 +67,7 @@ public class Table {
         int bestIndex = -1;
         double bestValue = -1;
 
-        for (int i = 0; i < features; i++) {
+        for (int i = 0; i < featureCount; i++) {
             if (gain(i) > bestValue) {
                 bestIndex = i;
                 bestValue = gain(i);
@@ -85,7 +85,7 @@ public class Table {
     }
 
     private boolean outOfFeats() {
-        return features == 0;
+        return featureCount == 0;
     }
 
     private ArrayList<String> catsAsSet() {
@@ -208,7 +208,7 @@ public class Table {
     }
 
     public Table[] makeSubTables(int featureIndex) {
-        if (featureIndex >= features) {
+        if (featureIndex >= featureCount) {
             System.out.println("error! not enough features. feat#: " +
                                featureIndex + "\n" + this);
             System.out.println("returning null");
@@ -226,7 +226,7 @@ public class Table {
         HashMap<String, Table> subtables = new HashMap<>();
 
         for(int i = 0; i < out.length; i++) {
-            out[i] = new Table(bufferSet.data.get(i).quantity, features-1);
+            out[i] = new Table(bufferSet.data.get(i).quantity, featureCount-1);
             out[i].choiceOrClass = bufferSet.data.get(i).name;
             out[i].featureLabels = new ArrayList<String>(featureLabels);
             out[i].featureLabels.remove(featureIndex);

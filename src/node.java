@@ -86,14 +86,15 @@ public class Node {
 
     public void split() {
         int featureIndex = table.highestGainFeature();
+
         Table[] tables = table.makeSubTables(featureIndex);
-        String[] featnames = table.getFeatureLabels(featureIndex);
-        for (int i = 0; i<featnames.length; i++) {
-            children.put(featnames[i],new Node(table.featureLabels.get(featureIndex),
-                    tables[i]));
-            //System.out.println(indent(4,tables[i].toString()));
-            if(children.get(featnames[i]).table.shouldSplit()){
-                children.get(featnames[i]).split();
+        String[] features = table.getFeatureLabels(featureIndex);
+
+        for (int i = 0; i < features.length; i++) {
+            children.put(features[i], new Node(table.featureLabels.get(featureIndex),
+                         tables[i]));
+            if (children.get(features[i]).table.shouldSplit()) {
+                children.get(features[i]).split();
             }
         }
         //then split recursively
