@@ -2,13 +2,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class node {
+public class Node {
     String name;
-    table myTab;
-    HashMap<String, node> children;
-    //HashMap<String, table> subTabs;//i dont think i need this. the kids can
+    Table myTab;
+    HashMap<String, Node> children;
+    //HashMap<String, Table> subTabs;//i dont think i need this. the kids can
     // keep track of their own tables.
-    public node(String name, table t){
+    public Node(String name, Table t){
         this.name=name;
         myTab=t;
         children=new HashMap<>();
@@ -16,7 +16,7 @@ public class node {
     }
 
     //when making the tree we want to go a level deeper if:
-    //a node has more than one category && has more than 1 element
+    //a Node has more than one category && has more than 1 element
     //this doesnt check for the case where the cats are mixed, there are
     // multiple elements, and the features all have the same values.
     //i suppose it will continue eliminating features but it makes
@@ -29,11 +29,11 @@ public class node {
     //elements=0? can this happen?
 
     public static void main(String[] args){
-//        node choice1 = new node("color");
-//        node choice2 = new node("shape");
-//        node class1 = new node("class1");
-//        node class2 = new node("class2");
-//        node class3 = new node("class3");
+//        Node choice1 = new Node("color");
+//        Node choice2 = new Node("shape");
+//        Node class1 = new Node("class1");
+//        Node class2 = new Node("class2");
+//        Node class3 = new Node("class3");
 
 //        choice1.children.put("red",choice2);
 //        choice1.children.put("blue",class1);
@@ -43,7 +43,7 @@ public class node {
 //        System.out.println(choice1);
 
         //everything is commented out because of the cunstructor change.
-        //you now need a table to make a node. how will this work for leaf nodes
+        //you now need a Table to make a Node. how will this work for leaf nodes
         //i need to trace through a simple example
     }
 
@@ -86,10 +86,10 @@ public class node {
     public void split(){//always check to see if you should split before you do.
         if(!myTab.shouldSplit()){return;}
         int feat = myTab.highestGainFeature();
-        table[] tables=myTab.makeSubTables(feat);
+        Table[] tables=myTab.makeSubTables(feat);
         String[] featnames = myTab.getFeatLables(feat);
         for(int i = 0;i<featnames.length;i++){
-            children.put(featnames[i],new node(myTab.featureLables.get(feat),
+            children.put(featnames[i],new Node(myTab.featureLables.get(feat),
                     tables[i]));
             //System.out.println(indent(4,tables[i].toString()));
             if(children.get(featnames[i]).myTab.shouldSplit()){

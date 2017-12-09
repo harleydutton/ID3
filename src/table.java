@@ -1,9 +1,7 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Set;
 
-public class table {
+public class Table {
 
     private String[][] guts;
     private int elements;
@@ -18,7 +16,7 @@ public class table {
     //todo
     //make the decision tree
 
-    public table(int elements, int features){
+    public Table(int elements, int features){
         catIndx=features+1;
         this.features=features;
         guts = new String[elements][features+1];
@@ -31,37 +29,6 @@ public class table {
         featureLables=new ArrayList<>();
     }
     public static void main(String[] args){
-
-        //data input
-        table t = new table(10,3);
-        String[] fl = new String[]{"quant","color","shape"};
-        t.featureLables = new ArrayList<String>(Arrays.asList(fl));
-        t.add(new String[]{"1","red","square","A"});//0
-        t.add(new String[]{"1","blue","square","B"});//1
-        t.add(new String[]{"1","red","circle","C"});//2
-        t.add(new String[]{"1","blue","circle","D"});//3
-        t.add(new String[]{"2","red","triangle","A"});//4
-        t.add(new String[]{"2","blue","triangle","B"});//5
-        t.add(new String[]{"2","green","triangle","C"});//6
-        t.add(new String[]{"1","green","square","A"});//7
-        t.add(new String[]{"2","red","circle","B"});//8
-        t.add(new String[]{"1","red","triangle","C"});//9
-
-        //info output
-        System.out.println(t);
-        System.out.println("entropy of t:"+t.tableEntropy());
-        System.out.println("highest gain feature is:"+t.highestGainFeature());
-        System.out.println("subtables split on feature "+t.highestGainFeature
-                ()+":");
-        for(table temp : t.makeSubTables(t.highestGainFeature())){
-            System.out.println(temp);
-            System.out.println(rowsep);
-        }
-        System.out.println(rowsep);
-
-        node n = new node("my node", t);
-        n.split();
-        System.out.println(n);
 
     }
     public int highestGainFeature(){
@@ -101,8 +68,8 @@ public class table {
 
     public double gain(int featNum){
         double out = this.tableEntropy();
-        table[] subTables = this.makeSubTables(featNum);
-        for(table t : subTables){
+        Table[] subTables = this.makeSubTables(featNum);
+        for(Table t : subTables){
             double temp = t.elements*t.tableEntropy()/this.elements;
             out-=temp;
         }
@@ -117,16 +84,16 @@ public class table {
             for(String s : strs){
                 System.out.print(s);
             }
-            System.out.println("this is the table:\n"+this);
+            System.out.println("this is the Table:\n"+this);
         }
         if(addIndex>=guts.length){
-            System.out.println("this table isnt large enough to hold another " +
+            System.out.println("this Table isnt large enough to hold another " +
                     "element");
         }
         guts[addIndex]=strs;addIndex++;
     }
     public String[] getFeatLables(int featNum){
-        bucketmanager bm = new bucketmanager();
+        BucketManager bm = new BucketManager();
         for(int i =0 ; i < guts.length;i++){
             bm.add(guts[i][featNum]);
         }
@@ -175,7 +142,7 @@ public class table {
     boolean allSameClass(){//part of recursive check for making nodes on tree
         String[] cats = getCats();
         if(cats.length==0){
-            System.out.println("ERROR: allSameClass() called on a table with " +
+            System.out.println("ERROR: allSameClass() called on a Table with " +
                     "0 elements");
             return true;//this should never happen
         }
@@ -186,7 +153,7 @@ public class table {
         return true;
     }
 
-    public table[] makeSubTables(int featureNum){
+    public Table[] makeSubTables(int featureNum){
         if(featureNum>=features){
             System.out.println("error! not enough features. feat#: " +
                     ""+featureNum+"\n"+this);
@@ -195,21 +162,21 @@ public class table {
         }
 
         //figure out how many sub tables we need.
-        bucketmanager bm = new bucketmanager();
+        BucketManager bm = new BucketManager();
         for(String[] sa : guts){
             bm.add(sa[featureNum]);
         }
         int size = bm.numBucks();
-        table[] out = new table[size];
-        HashMap<String, table> blah = new HashMap<>();
+        Table[] out = new Table[size];
+        HashMap<String, Table> blah = new HashMap<>();
         for(int i = 0 ; i < out.length;i++){
-            out[i]=new table(bm.bucks.get(i).count,features-1);
+            out[i]=new Table(bm.bucks.get(i).count,features-1);
             out[i].choiceOrClass=bm.bucks.get(i).name;
             out[i].featureLables=new ArrayList(featureLables);
             out[i].featureLables.remove(featureNum);
             blah.put(bm.bucks.get(i).name,out[i]);
         }
-        for(String[] sa : guts){//this is the big table. blah is the subtables
+        for(String[] sa : guts){//this is the big Table. blah is the subtables
             String[] reduced = new String[catIndx-1];
             int r = 0;
             for(int i  = 0; i < sa.length; i++){//iterate through sa (bigT)
@@ -224,7 +191,7 @@ public class table {
         return out;
     }
 
-    //this will only take as many features as the table can handle
+    //this will only take as many features as the Table can handle
     //(columns-1)
     public void set(int row, String classification, String... features){
         guts[row][guts[row].length-1]=classification;
@@ -236,7 +203,7 @@ public class table {
         return Math.log(num) / Math.log(2.0);
     }
     public double tableEntropy(){
-        bucketmanager bm = new bucketmanager();
+        BucketManager bm = new BucketManager();
         for(int i = 0 ; i < guts.length; i++){
             bm.add(guts[i][guts[i].length-1]);
         }
@@ -254,54 +221,5 @@ public class table {
     }
 
 }
-class bucketmanager{
-    ArrayList<bucket> bucks;
-    bucketmanager(){
-        bucks = new ArrayList<>();
-    }
-    void add(String str){
-        //boolean foundit = false;
-        for(bucket b : bucks){
-            if(b.name.equals(str)){
-                b.count++;
-                return;
-            }
-        }
-        bucks.add(new bucket(str));
-    }
-    double[] getCategoryHistogram(){
-        double[] out = new double[bucks.size()];
-        for(int i = 0; i < out.length; i++){
-            out[i]=bucks.get(i).count;
-        }
-        return out;
-    }
-    public String[] handOverTheStrings(){
-        String[] out = new String[bucks.size()];
-        for(int i = 0 ; i < out.length; i++){
-            out[i]=bucks.get(i).name;
-        }
-        return out;
-    }
-    public String toString(){
-        String out = "";
-        for(bucket b : bucks){
-            out+=b+"  ";
-        }
-        return out;
-    }
-    public int numBucks(){
-        return bucks.size();
-    }
-}
-class bucket{
-    String name;
-    int count;
-    bucket(String str){
-        name=str;
-        count=1;
-    }
-    public String toString(){
-        return name+":"+count;
-    }
-}
+
+
