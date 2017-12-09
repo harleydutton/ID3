@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class node {
@@ -47,15 +49,19 @@ public class node {
 
 
     public String toString(){
-        String out =name;
-        if(!children.isEmpty()){ out+=":"; }
-        out+="\n";
+        String out ="";//name.toUpperCase();
+        //if(!children.isEmpty()){ out+=":"; }
+        //out+="\n";
         int tab = 4;
 
         for(String key : children.keySet()){
-            String temp = key+"-->"+children.get(key).name+"\n";
-            if(!children.get(key).children.isEmpty())
+            String temp = children.get(key).name+"-->"+key+"\n";
+            if(!children.get(key).children.isEmpty()){
                 temp+=indent(tab,children.get(key).toString());
+                //temp+=indent(tab,new ArrayList<>(Arrays.asList(myTab.getCats())).toString());
+            }else{
+
+            }
             out+=indent(0,temp);
         }
 
@@ -78,7 +84,8 @@ public class node {
         table[] tables=myTab.makeSubTables(feat);
         String[] featnames = myTab.getFeatLables(feat);
         for(int i = 0;i<featnames.length;i++){
-            children.put(featnames[i],new node(featnames[i],tables[i]));
+            children.put(featnames[i],new node(myTab.featureLables.get(feat),
+                    tables[i]));
             //System.out.println(indent(4,tables[i].toString()));
             if(children.get(featnames[i]).myTab.shouldSplit()){
                 children.get(featnames[i]).split();
