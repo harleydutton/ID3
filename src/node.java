@@ -2,17 +2,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class node {
+public class Node {
     String name;
-    table myTab;
-    HashMap<String, node> children;
-    //HashMap<String, table> subTabs;//i dont think i need this. the kids can
-    // keep track of their own tables.
-    public node(String name, table t){
-        this.name=name;
-        myTab=t;
-        children=new HashMap<>();
-        //subTabs=new HashMap<>();
+    Table table;
+    HashMap<String, Node> children;
+
+    public Node(String name, Table table){
+        this.name = name;
+        this.table = table;
+
+        children = new HashMap<>();
     }
 
     //when making the tree we want to go a level deeper if:
@@ -29,11 +28,11 @@ public class node {
     //elements=0? can this happen?
 
     public static void main(String[] args){
-//        node choice1 = new node("color");
-//        node choice2 = new node("shape");
-//        node class1 = new node("class1");
-//        node class2 = new node("class2");
-//        node class3 = new node("class3");
+//        Node choice1 = new Node("color");
+//        Node choice2 = new Node("shape");
+//        Node class1 = new Node("class1");
+//        Node class2 = new Node("class2");
+//        Node class3 = new Node("class3");
 
 //        choice1.children.put("red",choice2);
 //        choice1.children.put("blue",class1);
@@ -48,46 +47,52 @@ public class node {
     }
 
 
-    public String toString(){
-        String out ="";//name.toUpperCase();
-        //if(!children.isEmpty()){ out+=":"; }
-        //out+="\n";
+    public String toString() {
+        String out = "";
         int tab = 4;
 
-        for(String key : children.keySet()){
-            String temp = children.get(key).name+"-->"+key+"\n";
-            if(!children.get(key).children.isEmpty()){
-                temp+=indent(tab,children.get(key).toString());
-                //temp+=indent(tab,new ArrayList<>(Arrays.asList(myTab.getCats())).toString());
-            }else{
-
+        for (String key : children.keySet()) {
+            String temp = children.get(key).name + "-->" + key;
+            if (children.get(key).children.isEmpty()) {
+                temp += new ArrayList<>(Arrays.asList(table.getCategories())).toString();
             }
-            out+=indent(0,temp);
+            temp += "\n";
+            //temp += "test1";
+            if (!children.get(key).children.isEmpty()) {
+                //temp += "test2";
+                temp += indent(tab,children.get(key).toString());
+                //temp+=indent(tab,new ArrayList<>(Arrays.asList(table.getCategories())).toString());
+                //temp += "test3";
+            }
+
+            out += indent(0,temp);
         }
 
         return out;
     }
-    public static String indent(int howmanyspaces, String input){
+
+    public static String indent(int length, String input){
         String out = input;
-        String pad = new String(new char[howmanyspaces]).replace("\0"," ");
+        String pad = new String(new char[length]).replace("\0"," ");
 
-        for(int i = out.length()-1;i>0;i--){
-            if(out.substring(i-1,i).equals("\n")){
-                out=out.substring(0,i)+pad+out.substring(i);
+        for (int i = out.length()-1; i>0; i--) {
+            if (out.substring(i-1,i).equals("\n")) {
+                out = out.substring(0,i)+pad+out.substring(i);
             }
         }
-        out=pad+out;
+        out = pad + out;
         return out;
     }
-    public void split(){
-        int feat = myTab.highestGainFeature();
-        table[] tables=myTab.makeSubTables(feat);
-        String[] featnames = myTab.getFeatLables(feat);
-        for(int i = 0;i<featnames.length;i++){
-            children.put(featnames[i],new node(myTab.featureLables.get(feat),
+
+    public void split() {
+        int featureIndex = table.highestGainFeature();
+        Table[] tables = table.makeSubTables(featureIndex);
+        String[] featnames = table.getFeatureLabels(featureIndex);
+        for (int i = 0; i<featnames.length; i++) {
+            children.put(featnames[i],new Node(table.featureLabels.get(featureIndex),
                     tables[i]));
             //System.out.println(indent(4,tables[i].toString()));
-            if(children.get(featnames[i]).myTab.shouldSplit()){
+            if(children.get(featnames[i]).table.shouldSplit()){
                 children.get(featnames[i]).split();
             }
         }

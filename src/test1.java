@@ -3,9 +3,9 @@ import java.util.Arrays;
 
 public class test1 {
     public static void main(String[] args){
-        table t = new table(5,2);
+        Table t = new Table(5,2);
         String[] fl = new String[]{"color","shape"};
-        t.featureLables = new ArrayList<String>(Arrays.asList(fl));
+        t.featureLabels = new ArrayList<String>(Arrays.asList(fl));
         t.add(new String[]{"red","sq","A"});
         t.add(new String[]{"red","tri","A"});
         t.add(new String[]{"blue","sq","B"});
@@ -16,13 +16,13 @@ public class test1 {
         System.out.println("entropy of t:"+t.tableEntropy());
         System.out.println("highest gain feature is:"+t.highestGainFeature());
         int i = t.highestGainFeature();
-        for(table temp : t.makeSubTables(i)){
+        for(Table temp : t.makeSubTables(i)){
             System.out.print(temp);
-            System.out.println(table.rowsep);
+            System.out.println(Table.rowsep);
         }
 
-        System.out.println(table.rowsep);
-        node n = new node("root",t);
+        System.out.println(Table.rowsep);
+        Node n = new Node("root",t);
         n.split();
         System.out.println(n);
     }
